@@ -1,4 +1,4 @@
-service: nestjs-serverless-pg
+service: posture-detection-backend
 
 frameworkVersion: '3'
 
@@ -7,7 +7,7 @@ provider:
   runtime: nodejs16.x
   architecture: arm64
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'ap-south-1'}
+  region: ${opt:region, 'ap-southeast-1'}
   memorySize: 128
   logRetentionInDays: 1
   timeout: 15

@@ -74,7 +74,7 @@
     "ApiLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/nestjs-serverless-pg-dev-api",
+        "LogGroupName": "/aws/lambda/posture-detection-backend-dev-api",
         "RetentionInDays": 1
       }
     },
@@ -103,7 +103,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "nestjs-serverless-pg",
+                  "posture-detection-backend",
                   "dev",
                   "lambda"
                 ]
@@ -116,11 +116,12 @@
                   "Effect": "Allow",
                   "Action": [
                     "logs:CreateLogStream",
-                    "logs:CreateLogGroup"
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/nestjs-serverless-pg-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/posture-detection-backend-dev*:*"
                     }
                   ]
                 },
@@ -131,7 +132,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/nestjs-serverless-pg-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/posture-detection-backend-dev*:*:*"
                     }
                   ]
                 }
@@ -144,7 +145,7 @@
           "Fn::Join": [
             "-",
             [
-              "nestjs-serverless-pg",
+              "posture-detection-backend",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -162,11 +163,11 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/nestjs-serverless-pg/dev/1674920052255-2023-01-28T15:34:12.255Z/nestjs-serverless-pg.zip"
+          "S3Key": "serverless/posture-detection-backend/dev/1699199369132-2023-11-05T15:49:29.132Z/posture-detection-backend.zip"
         },
         "Handler": "dist/lambda.handler",
         "Runtime": "nodejs16.x",
-        "FunctionName": "nestjs-serverless-pg-dev-api",
+        "FunctionName": "posture-detection-backend-dev-api",
         "MemorySize": 128,
         "Timeout": 15,
         "Architectures": [
@@ -183,20 +184,20 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionq2ObiyOcu3kVMJf1djJ8UBNkvjHit8KfWv48MoaWU": {
+    "ApiLambdaVersiontXItAKj4a4cVhUUmsRcLaZ9WOu0Ql5c2C9f64viRUk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "+3yM6I4mFCaNVQSPGIv0LKdmoPjNbcS8KE84Nyi8Q4c="
+        "CodeSha256": "9ajt6REphmTyhNz7U4VCoWgO698TItmMX8Ejt499PGE="
       }
     },
     "HttpApi": {
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
-        "Name": "dev-nestjs-serverless-pg",
+        "Name": "dev-posture-detection-backend",
         "ProtocolType": "HTTP"
       }
     },
@@ -264,7 +265,7 @@
           ]
         },
         "PayloadFormatVersion": "2.0",
-        "TimeoutInMillis": 15500
+        "TimeoutInMillis": 30000
       }
     },
     "HttpApiRouteAnyProxyVar": {
@@ -295,16 +296,16 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-nestjs-serverless-pg-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-posture-detection-backend-dev-ServerlessDeploymentBucketName"
       }
     },
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionq2ObiyOcu3kVMJf1djJ8UBNkvjHit8KfWv48MoaWU"
+        "Ref": "ApiLambdaVersiontXItAKj4a4cVhUUmsRcLaZ9WOu0Ql5c2C9f64viRUk"
       },
       "Export": {
-        "Name": "sls-nestjs-serverless-pg-dev-ApiLambdaFunctionQualifiedArn"
+        "Name": "sls-posture-detection-backend-dev-ApiLambdaFunctionQualifiedArn"
       }
     },
     "HttpApiId": {
@@ -313,7 +314,7 @@
         "Ref": "HttpApi"
       },
       "Export": {
-        "Name": "sls-nestjs-serverless-pg-dev-HttpApiId"
+        "Name": "sls-posture-detection-backend-dev-HttpApiId"
       }
     },
     "HttpApiUrl": {
@@ -338,7 +339,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-nestjs-serverless-pg-dev-HttpApiUrl"
+        "Name": "sls-posture-detection-backend-dev-HttpApiUrl"
       }
     }
   }
