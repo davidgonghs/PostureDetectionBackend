@@ -163,7 +163,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/posture-detection-backend/dev/1699199369132-2023-11-05T15:49:29.132Z/posture-detection-backend.zip"
+          "S3Key": "serverless/posture-detection-backend/dev/1699247240896-2023-11-06T05:07:20.896Z/api.zip"
         },
         "Handler": "dist/lambda.handler",
         "Runtime": "nodejs16.x",
@@ -184,14 +184,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersiontXItAKj4a4cVhUUmsRcLaZ9WOu0Ql5c2C9f64viRUk": {
+    "ApiLambdaVersionPDGTeEEY677rWXxn2aFSmDHGa9dK4Vys6oQGbl957M": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "9ajt6REphmTyhNz7U4VCoWgO698TItmMX8Ejt499PGE="
+        "CodeSha256": "/6DazCNvSVq3eZctohsd2qyZfHi8fxQlZC5Dgxca5i4="
       }
     },
     "HttpApi": {
@@ -302,7 +302,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersiontXItAKj4a4cVhUUmsRcLaZ9WOu0Ql5c2C9f64viRUk"
+        "Ref": "ApiLambdaVersionPDGTeEEY677rWXxn2aFSmDHGa9dK4Vys6oQGbl957M"
       },
       "Export": {
         "Name": "sls-posture-detection-backend-dev-ApiLambdaFunctionQualifiedArn"
