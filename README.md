@@ -18,11 +18,23 @@ Note: Before starting the server ,ensure the database connection details is upda
 ## Deploy to Cloud
 
 1. Configure your AWS credentials using `aws configure` command.
-2. `sls deploy`
+2. `serverless deploy`
 
 Note: Ensure you have Serverless Framework installed. If not , you can install it globally using `npm install -g serverless`
 
 
 ## Test Serverless Locally
 
-`sls offline`
+`serverless offline`
+
+## Build table in AWS Dynamodb
+    go to src/dynamodb/xxx/model.ts
+    ```bash
+    $ tsc model.ts
+    $ node model.js
+    ```
+
+## create object folder
+    ```bash
+    $ nest g resource xxxObjectNamexxx --no-spec
+    ```

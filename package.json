@@ -21,6 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.430.0",
+    "@aws-sdk/lib-dynamodb": "^3.430.0",
+    "@aws/dynamodb-data-mapper": "^0.7.3",
     "@nestjs/common": "^9.2.1",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.2.1",
@@ -28,6 +31,7 @@
     "@nestjs/platform-express": "^9.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@vendia/serverless-express": "^4.10.1",
+    "class-validator": "^0.14.0",
     "config": "^3.3.9",
     "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13",
