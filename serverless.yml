@@ -2,9 +2,6 @@ service: posture-detection-backend
 
 frameworkVersion: '3'
 
-plugins:
-  - serverless-jetpack
-
 provider:
   name: aws
   runtime: nodejs16.x
@@ -23,31 +20,14 @@ functions:
           method: any
           path: /{proxy+}
 
-#plugins:
-#  - serverless-offline
-#  - serverless-jetpack
-#  - serverless-dotenv-plugin
-#  - serverless-plugin-include-dependencies
-#  - serverless-plugin-common-excludes
 
+package:
+  individually: true
+  # Good. Remove dependency provided by lambda from zip
+  exclude:
+    - "**/node_modules/aws-sdk/**"
 
-
-
-#custom:
-#  bundle:
-#    ignorePackages:
-#      - pg-native
-#  includeDependencies:
-#    includeAll: true
-#
-#common-excludes: true
-#
-#package:
-#  individually: true
-#  exclude:
-#    - '**/node_modules/aws-sdk/**'
-#    - '**/node_modules/**/test/**'
-#    - '**/node_modules/**/README.*'
-#  include:
-#    - '!**/node_modules/aws-sdk/**'
-#    - .env
+  # Better! Never even read the files from disk during globbing in the first place!
+  include:
+    - "!**/node_modules/aws-sdk/**"
+    - .env
