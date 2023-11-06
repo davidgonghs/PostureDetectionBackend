@@ -9,7 +9,7 @@ const putUserLog = (userLog: UserLog) => {
     const params: PutCommandInput = {
         TableName: "UserLog",
         Item: {
-            user_id: userLog.user_id,
+            user_id: +userLog.user_id,
             login_date: userLog.login_date,
             user_name: userLog.user_name,
             user_email: userLog.user_email,

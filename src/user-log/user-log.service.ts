@@ -14,6 +14,7 @@ export class UserLogService {
     // const userLog = new UserLog(userId, login_date, user_name, user_email, ip_address, platform, system);
     console.log(userLog);
     putUserLog(userLog).then(r => console.log(r));
+    return "Success"
   }
 
   findAllUserLog() {

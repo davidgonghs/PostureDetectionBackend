@@ -20,6 +20,8 @@ functions:
           method: any
           path: /{proxy+}
 
+plugins:
+  - serverless-offline
 
 package:
   individually: true
