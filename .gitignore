@@ -33,3 +33,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+PostureDetectionBackend.zip
+PostureDetectionBackend v0.1.zip
