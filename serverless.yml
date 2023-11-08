@@ -31,6 +31,8 @@ functions:
           - dynamodb:DeleteItem
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/*"
 
+plugins:
+    - serverless-offline
 
 
 package:

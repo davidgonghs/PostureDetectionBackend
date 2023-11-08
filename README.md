@@ -38,3 +38,8 @@ Note: Ensure you have Serverless Framework installed. If not , you can install i
     ```bash
     $ nest g resource xxxObjectNamexxx --no-spec
     ```
+
+## upload zip file to s3
+    ```bash
+    $ aws s3 cp ./PostureDetectionBackend.zip s3://posturedetection.backend.code/PostureDetectionBackend0.2.zip
+    ```
