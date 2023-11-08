@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+*.zip
+
+./azip
 # Logs
 logs
 *.log
