@@ -1,5 +1,14 @@
 /************* RESPONSE UTILS *************/
 
+// Function to create a standardized response
+const createResponse = (status, message, data) => ({
+    status,
+    message,
+    data,
+});
+
+
+
 /* return a response with a status, message and a data */
 const data = (message, data, log = false) => {
     const response = { //schema for response

@@ -3,7 +3,7 @@ import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { AdminLoginDto } from "./dto/LoginAdminDto";
-
+import { createResponse } from '../utils/create-response';
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -35,6 +35,11 @@ export class AdminController {
 
   @Post(':login')
   login(@Body() adminLoginDto: AdminLoginDto) {
-    return this.adminService.login(adminLoginDto);
+    this.adminService.login(adminLoginDto)
+    let reponse = createResponse(200, "Login success", null);
+    if(!this.adminService.login(adminLoginDto)){
+      reponse = createResponse(400, "Login failed/Can not find User/Password wrong", null);
+    }
+    return reponse;
   }
 }

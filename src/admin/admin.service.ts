@@ -43,7 +43,7 @@ export class AdminService {
     return `This action removes a #${id} admin`;
   }
 
-  async login(adminLoginDto: AdminLoginDto) {
+  async login(adminLoginDto: AdminLoginDto): Promise<boolean> {
     const admin: Admin = new Admin(adminLoginDto.username);
 
     //find user by username
@@ -51,12 +51,12 @@ export class AdminService {
     if (adminUser) {
       const result = await comparePassword(adminLoginDto.password, adminUser.password);
       if (result) {
-        return "success";
+        return true;
       } else {
-        return 'Password is incorrect';
+        return false;
       }
     } else {
-      return 'User not found';
+      return false;
     }
   }
 
