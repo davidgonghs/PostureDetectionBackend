@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { AdminLoginDto } from "./dto/LoginAdminDto";
 import { createResponse } from '../utils/create-response';
+import { JwtGuard } from "../auth/guards/jwt-auth.guard";
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -33,13 +34,19 @@ export class AdminController {
     return this.adminService.remove(+id);
   }
 
-  @Post(':login')
-  login(@Body() adminLoginDto: AdminLoginDto) {
-    // this.adminService.login(adminLoginDto.username, adminLoginDto.password);
-    let reponse = createResponse(200, "Login success", null);
-    if(!this.adminService.login(adminLoginDto.username, adminLoginDto.password)){
-      reponse = createResponse(400, "Login failed/Can not find User/Password wrong", null);
-    }
-    return reponse;
-  }
+  // @UseGuards(JwtGuard)
+  // @Get('verify/:username')
+  // verify(@Param('username') username: string) {
+  //   return createResponse(200, "success", username);
+  // }
+
+  // @Post(':login')
+  // login(@Body() adminLoginDto: AdminLoginDto) {
+  //   // this.adminService.login(adminLoginDto.username, adminLoginDto.password);
+  //   let reponse = createResponse(200, "Login success", null);
+  //   if(!this.adminService.login(adminLoginDto.username, adminLoginDto.password)){
+  //     reponse = createResponse(400, "Login failed/Can not find User/Password wrong", null);
+  //   }
+  //   return reponse;
+  // }
 }

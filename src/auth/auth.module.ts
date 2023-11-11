@@ -1,32 +1,32 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserService } from 'src/user/user.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { LocalStrategy } from './strategies/local-strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LocalStrategy } from './strategies/local-strategy';
 import { JwtStrategy } from './strategies/jwt-strategy';
 import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
-import { User } from "../user/entities/user.entity";
 import { Admin } from "../admin/entities/admin.entity";
 import { AdminService } from "../admin/admin.service";
+import { AuthGuard } from "./guards/auth.guard";
 
 @Module({
   providers: [
     AuthService,
-    UserService,
+    AdminService,
+    AuthGuard,
     LocalStrategy,
     JwtStrategy,
     RefreshJwtStrategy,
-    UserService,
-    AdminService,
   ],
   controllers: [AuthController],
+  exports: [AuthService],
   imports: [
-    TypeOrmModule.forFeature([User,Admin]),
+    TypeOrmModule.forFeature([Admin]),
     JwtModule.register({
-      secret: `${process.env.jwt_secret}`,
-      // signOptions: { expiresIn: '100s' },
+      global: true,
+      secret: `${process.env.JWT_SECRET}`,
+      signOptions: { expiresIn: '3600s' },
     }),
   ],
 })

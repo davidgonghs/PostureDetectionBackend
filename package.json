@@ -9,7 +9,7 @@
     "build": "nest build",
     "start": "./node_modules/serverless/bin/serverless offline -s dev",
     "start:dev": "nest start --watch",
-    "debug": "set SLS_DEBUG=* && node --inspect ./node_modules/serverless/bin/serverless offline -s dev"
+    "debug": "set SLS_DEBUG=* && node --inspect ./node_modules/serverless/bin/serverless offline --verbose"
   },
   "dependencies": {
     "@nestjs/common": "^9.2.1",
