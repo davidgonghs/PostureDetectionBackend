@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+.vscode/
+/.vscode
 
 *.zip
 
@@ -38,3 +40,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 PostureDetectionBackend.zip
 PostureDetectionBackend v0.1.zip
+.vscode/launch.json

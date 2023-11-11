@@ -8,10 +8,10 @@ import { createResponse } from '../utils/create-response';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @Post()
-  create(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminService.create(createAdminDto);
-  }
+  // @Post()
+  // create(@Body() createAdminDto: CreateAdminDto) {
+  //   return this.adminService.create(createAdminDto);
+  // }
 
   @Get()
   findAll() {
@@ -35,9 +35,9 @@ export class AdminController {
 
   @Post(':login')
   login(@Body() adminLoginDto: AdminLoginDto) {
-    this.adminService.login(adminLoginDto)
+    // this.adminService.login(adminLoginDto.username, adminLoginDto.password);
     let reponse = createResponse(200, "Login success", null);
-    if(!this.adminService.login(adminLoginDto)){
+    if(!this.adminService.login(adminLoginDto.username, adminLoginDto.password)){
       reponse = createResponse(400, "Login failed/Can not find User/Password wrong", null);
     }
     return reponse;

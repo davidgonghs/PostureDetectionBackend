@@ -13,7 +13,7 @@ export class UserService {
   ) {}
 
 
-  async create(createUserDto: User) : Promise<User> {
+  async create(createUserDto: CreateUserDto) : Promise<User> {
     return await this.userRepository.save(createUserDto);
   }
 
@@ -29,6 +29,11 @@ export class UserService {
     return await this.userRepository.findOneBy(user);
   }
 
+  async findOneWithUserName(userName: string) {
+    return await this.userRepository.findOne({ where: { username: userName } });
+  }
+
+
   // update function
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User | undefined> {
     // Find the user you want to update
@@ -40,8 +45,8 @@ export class UserService {
     }
 
     // Update the user's properties with the values from updateUserDto
-    if (updateUserDto.name) {
-      userToUpdate.name = updateUserDto.name;
+    if (updateUserDto.username) {
+      userToUpdate.username = updateUserDto.username;
     }
     if (updateUserDto.email) {
       userToUpdate.email = updateUserDto.email;

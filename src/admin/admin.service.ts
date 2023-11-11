@@ -24,7 +24,16 @@ export class AdminService {
   async create(createAdminDto: CreateAdminDto) {
     const admin: Admin = new Admin(createAdminDto.username, createAdminDto.password);
     admin.password = await processPassword(admin.password);
-    return await this.adminRepository.save(admin);
+   // const user = await this.adminRepository.create(admin);
+    await this.adminRepository.save(admin);
+    const { password, ...result } = admin;
+    return admin;
+  }
+
+  // findOneWithUserName
+  async findOneWithUserName(username:string): Promise<Admin> {
+    const admin: Admin = new Admin(username);
+    return await this.adminRepository.findOneBy({username: admin.username});
   }
 
   findAll() {
@@ -43,13 +52,13 @@ export class AdminService {
     return `This action removes a #${id} admin`;
   }
 
-  async login(adminLoginDto: AdminLoginDto): Promise<boolean> {
-    const admin: Admin = new Admin(adminLoginDto.username);
+  async login(username:string, password:string): Promise<boolean> {
+    const admin: Admin = new Admin(username);
 
     //find user by username
     const adminUser = await this.adminRepository.findOneBy({username: admin.username});
     if (adminUser) {
-      const result = await comparePassword(adminLoginDto.password, adminUser.password);
+      const result = await comparePassword(password, adminUser.password);
       if (result) {
         return true;
       } else {

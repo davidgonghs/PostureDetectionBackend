@@ -7,6 +7,7 @@ import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
 import { UserLogModule } from './user-log/user-log.module';
 import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AdminModule } from './admin/admin.module';
     UserModule,
     UserLogModule,
     AdminModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
