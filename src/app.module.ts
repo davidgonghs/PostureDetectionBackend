@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { UserLogModule } from './user-log/user-log.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     UserLogModule,
     AdminModule,
     AuthModule,
+    FeedbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -15,4 +15,13 @@ export class User {
   @Column()
   password: string
 
+  @Column()
+  img: string;
+
+  @Column()
+  create_at: Date;
+
+  @Column()
+  update_at: Date;
+
 }

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
@@ -9,11 +9,12 @@ import { Repository } from "typeorm";
 export class UserService {
 
   constructor(
-    @InjectRepository(User) private  readonly userRepository: Repository<User>,
-  ) {}
+    @InjectRepository(User) private readonly userRepository: Repository<User>
+  ) {
+  }
 
 
-  async create(createUserDto: CreateUserDto) : Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     return await this.userRepository.save(createUserDto);
   }
 
@@ -24,7 +25,7 @@ export class UserService {
 
   // find one function
   async findOne(id: number): Promise<User> {
-    let user = new User()
+    let user = new User();
     user.id = id;
     return await this.userRepository.findOneBy(user);
   }
@@ -64,10 +65,30 @@ export class UserService {
     await this.userRepository.delete(id);
   }
 
+//   count total user
+  async countUser(type: string) {
+    let totalUser = 0;
+    if (type == "all") {
+      totalUser = await this.userRepository.count();
+    } else if (type == "new") {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set the time to the beginning of the day
+
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1); // Set the time to the beginning of the next day
+
+      const query = `
+          SELECT COUNT(*) as totalUser
+          FROM user
+          WHERE create_at >= $1
+            AND create_at < $2;
+      `;
+
+      const result = await this.userRepository.query(query, [today, tomorrow]);
+      totalUser = result[0].totalUser;
+    }
+    return totalUser;
+  }
 
 
-  //
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 }

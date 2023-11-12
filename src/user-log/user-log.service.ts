@@ -9,7 +9,7 @@ import { UserLog } from "./model/userlog.model";
 export class UserLogService {
 
   create(userLog: UserLog) {
-    userLog.login_date = new Date().toISOString();
+    userLog.login_date = Date.now();
     // login_date = new Date().toISOString();
     // const userLog = new UserLog(userId, login_date, user_name, user_email, ip_address, platform, system);
     console.log(userLog);
@@ -27,6 +27,13 @@ export class UserLogService {
 
   remove(id: number, login_date: string) {
     return `This action removes a #${id} userLog`;
+  }
+
+
+
+  //findActivity
+  findActivity(start:number, end:number) {
+    return getUserLog.getActivityUser(start, end)
   }
 
 
