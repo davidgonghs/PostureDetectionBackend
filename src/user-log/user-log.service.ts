@@ -23,7 +23,7 @@ export class UserLogService {
   }
 
   //findActivity
-  findActivity(start:number, end:number) {
+  findActivity(start:string, end:string) {
     return getUserLog.getActivityUser(start, end)
   }
 

@@ -18,7 +18,7 @@ import { createResponse } from "../utils/create-response";
 export class UserLogController {
   constructor(private readonly userLogService: UserLogService) {}
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Post()
   create(@Body() userLog: UserLog) {
     try{
@@ -29,22 +29,34 @@ export class UserLogController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.userLogService.findAllUserLog();
+  async findAll() {
+    try {
+      return createResponse(200, "Success", await this.userLogService.findAllUserLog())
+    } catch (e) {
+      return createResponse(500, e.message)
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userLogService.findByUserId(+id);
+  async findOne(@Param('id') id: number) {
+    try {
+      return createResponse(200, "Success", await this.userLogService.findByUserId(+id))
+    } catch (e) {
+      return createResponse(500, e.message)
+    }
   }
 
   // get activity user count
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Get('activity/:start/:end')
-  async findActivity(@Param('start') start: number, @Param('end') end: number) {
-    return createResponse(200, "Success", { count: await this.userLogService.findActivity(start, end) });
+  async findActivity(@Param('start') start: string, @Param('end') end: string) {
+    try{
+      return createResponse(200, "Success", await this.userLogService.findActivity(start, end))
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
   }
 
 

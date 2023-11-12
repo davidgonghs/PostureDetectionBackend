@@ -28,43 +28,47 @@ const getUserLogsByUserId = async (user_id: number) => {
 
 
 //get activity user count by date
-const getActivityUser = async (start:number, end:number) => {
-    // user_id id deduplication
-    // login_date include today
-    //
-    // const start = new Date();
-    // start.setHours(0, 0, 0, 0); // Set the time to the beginning of the day
-    // start.getTime(); // Convert to milliseconds since Unix epoch
+const getActivityUser = async (start, end) => {
+    try {
+        const countsByDate = [];
+        let totalUser = 0;
 
+        // Convert start and end to Date objects
+        const startDate = new Date(start);
+        const endDate = new Date(end);
 
+        // Iterate through each date in the range
+        for (let currentDate = startDate; currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+            const dateString = currentDate.toISOString().split('T')[0]; // Get the date part only
 
+            const params = {
+                TableName: "UserLog",
+                FilterExpression: "attribute_exists(user_id) AND attribute_exists(login_date) AND contains(login_date, :specificDate)",
+                ProjectionExpression: "user_id, login_date",
+                ExpressionAttributeValues: {
+                    ":specificDate": dateString,
+                },
+            };
 
-    const params = {
-        TableName: "UserLog",
-        FilterExpression: "attribute_exists(user_id) AND attribute_exists(login_date) AND login_date >= :start AND login_date < :end",
-        ProjectionExpression: "user_id, login_date",
-        ExpressionAttributeValues: {
-            ":start": start,
-            ":end": end
-        },
-    };
+            const command = new ScanCommand(params);
+            const data = await docClient.send(command);
 
-    const command = new ScanCommand(params);
-    const data = await docClient.send(command);
+            // Get unique user_ids for the current date
+            const uniqueUserIds = Array.from(new Set(data.Items.map(item => item.user_id)));
 
-    //get count
-    const user_id = [];
-    const login_date = [];
-    data.Items.forEach((item) => {
-        user_id.push(item.user_id);
-        login_date.push(item.login_date);
-    });
+            countsByDate.push({
+                date: dateString,
+                count: uniqueUserIds.length,
+            });
 
-    //deduplication
-    const unique_user_id = [...new Set(user_id)];
-    const count = unique_user_id.length;
+            totalUser += uniqueUserIds.length;
+        }
 
-    return count;
+        return { countsByDate, totalUser };
+    } catch (error) {
+        console.error('Error fetching activity count by date range:', error);
+        throw new Error('Error fetching activity count by date range');
+    }
 };
 
 //export all functions
