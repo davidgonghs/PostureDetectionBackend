@@ -1,6 +1,6 @@
-export const createResponse = (status, message, data) => ({
+export const createResponse = (status, message, data?) => ({
   status,
   message,
-  data,
+  data: data|| "",
 });
 

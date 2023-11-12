@@ -34,19 +34,5 @@ export class AdminController {
     return this.adminService.remove(+id);
   }
 
-  // @UseGuards(JwtGuard)
-  // @Get('verify/:username')
-  // verify(@Param('username') username: string) {
-  //   return createResponse(200, "success", username);
-  // }
 
-  // @Post(':login')
-  // login(@Body() adminLoginDto: AdminLoginDto) {
-  //   // this.adminService.login(adminLoginDto.username, adminLoginDto.password);
-  //   let reponse = createResponse(200, "Login success", null);
-  //   if(!this.adminService.login(adminLoginDto.username, adminLoginDto.password)){
-  //     reponse = createResponse(400, "Login failed/Can not find User/Password wrong", null);
-  //   }
-  //   return reponse;
-  // }
 }

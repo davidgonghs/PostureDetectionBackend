@@ -22,7 +22,7 @@ export class AdminService {
   ) {}
 
   async create(createAdminDto: CreateAdminDto) {
-    const admin: Admin = new Admin(createAdminDto.username, createAdminDto.password);
+    const admin: Admin = new Admin(createAdminDto.username, createAdminDto.password, createAdminDto.email, createAdminDto.role, createAdminDto.img);
     admin.password = await processPassword(admin.password);
    // const user = await this.adminRepository.create(admin);
     await this.adminRepository.save(admin);

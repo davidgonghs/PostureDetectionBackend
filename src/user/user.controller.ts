@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from "@nestjs/common";
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,36 +9,89 @@ import { AuthGuard } from "../auth/guards/auth.guard";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    try {
+      await this.userService.create(createUserDto);
+      return createResponse(200, "Success", "")
+    } catch (e) {
+      return createResponse(500, e.message, "")
+    }
+    return
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10,
+  ) {
+    const users = await this.userService.findAll(page, pageSize);
+    return createResponse(200, "Success", users)
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    let webUser = await this.userService.findOne(id);
+    try{
+      if (webUser) {
+        return createResponse(200, "Success", webUser)
+      }
+    }catch (e) {
+      return createResponse(500,  e.message,"")
+    }
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    let webUser = await this.userService.update(+id, updateUserDto);
+    try{
+      if (webUser) {
+        return createResponse(200, "Success", webUser)
+      }
+    } catch (e) {
+      return createResponse(500,  e.message,"")
+    }
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Param('id') id: number) {
+    try{
+      if (await this.userService.remove(id)) {
+        return createResponse(200, "Success", "")
+      }
+    }catch (e){
+      return createResponse(500,  e.message,"")
+    }
   }
 
 //   count total user
-  @UseGuards(AuthGuard)
-  @Get('count/:type')
-  countUser(@Param('type') type: string) {
-    return this.userService.countUser(type);
+  //@UseGuards(AuthGuard)
+  @Get('count/user')
+  async countUser(
+    @Query('start') start: string,
+    @Query('end') end: string
+  ) {
+    try {
+      return createResponse(200, "Success", await this.userService.countUser(start,end))
+    } catch (e) {
+      return createResponse(500, e.message)
+    }
+  }
+
+  //get last week how many new user and old user by day
+  //@UseGuards(AuthGuard)
+  @Get('count/user/lastweek')
+  async countUserLastWeek() {
+    try {
+      return createResponse(200, "Success", await this.userService.countUserLastWeek())
+    } catch (e) {
+      return createResponse(500, e.message)
+    }
   }
 
 

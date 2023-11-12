@@ -18,11 +18,18 @@ import { createResponse } from "../utils/create-response";
 export class UserLogController {
   constructor(private readonly userLogService: UserLogService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() userLog: UserLog) {
-    return this.userLogService.create(userLog);
+    try{
+      this.userLogService.create(userLog)
+      createResponse(200, "Success")
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.userLogService.findAllUserLog();
@@ -41,8 +48,6 @@ export class UserLogController {
   }
 
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userLogService.remove(+id);
-  // }
+
+
 }
