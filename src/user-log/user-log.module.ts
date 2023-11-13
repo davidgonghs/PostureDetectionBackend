@@ -7,6 +7,8 @@ import { UserLog } from "./model/userlog.model";
 @Module({
   imports: [TypeOrmModule.forFeature([UserLog])],
   controllers: [UserLogController],
-  providers: [UserLogService]
+  providers: [UserLogService],
+  exports: [UserLogService]
+
 })
 export class UserLogModule {}

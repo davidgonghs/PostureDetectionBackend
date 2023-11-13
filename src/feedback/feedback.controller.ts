@@ -9,7 +9,7 @@ import { createResponse } from "../utils/create-response";
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createFeedbackDto: CreateFeedbackDto) {
     try{
@@ -20,7 +20,7 @@ export class FeedbackController {
     }
   }
 
- // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get()
   async findAll(
     @Query('page') page: number = 1,
@@ -34,7 +34,7 @@ export class FeedbackController {
     }
   }
 
-//@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     let feedback = await this.feedbackService.findOne(id);
@@ -47,7 +47,7 @@ export class FeedbackController {
     }
   }
 
- // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateFeedbackDto: UpdateFeedbackDto) {
     try{
@@ -60,17 +60,17 @@ export class FeedbackController {
     return this.feedbackService.update(id, updateFeedbackDto);
   }
 
- // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.feedbackService.remove(+id);
   }
 
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('count/feedback')
   async count() {
     try{
-      return createResponse(200, "Success", { count: await this.feedbackService.count() });
+      return createResponse(200, "Success",  await this.feedbackService.count() );
     }catch (e) {
       return createResponse(500,  e.message)
     }

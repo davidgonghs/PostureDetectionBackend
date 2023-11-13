@@ -7,6 +7,7 @@ import { Feedback } from "./entities/feedback.entity";
 @Module({
   imports: [TypeOrmModule.forFeature([Feedback])],
   controllers: [FeedbackController],
-  providers: [FeedbackService]
+  providers: [FeedbackService],
+  exports: [FeedbackService]
 })
 export class FeedbackModule {}

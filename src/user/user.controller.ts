@@ -70,7 +70,7 @@ export class UserController {
   }
 
 //   count total user
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('count/user')
   async countUser(
     @Query('start') start: string,
@@ -84,7 +84,17 @@ export class UserController {
   }
 
   //get last week how many new user and old user by day
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
+  @Get('count/new-user/lastweek')
+  async countNewUserLastWeek() {
+    try {
+      return createResponse(200, "Success", await this.userService.countNewUserLastWeek())
+    } catch (e) {
+      return createResponse(500, e.message)
+    }
+  }
+
+  @UseGuards(AuthGuard)
   @Get('count/user/lastweek')
   async countUserLastWeek() {
     try {

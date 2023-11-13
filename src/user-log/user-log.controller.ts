@@ -18,7 +18,7 @@ import { createResponse } from "../utils/create-response";
 export class UserLogController {
   constructor(private readonly userLogService: UserLogService) {}
 
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() userLog: UserLog) {
     try{
@@ -29,7 +29,7 @@ export class UserLogController {
     }
   }
 
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     try {
@@ -39,6 +39,7 @@ export class UserLogController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     try {
@@ -49,7 +50,7 @@ export class UserLogController {
   }
 
   // get activity user count
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('activity/:start/:end')
   async findActivity(@Param('start') start: string, @Param('end') end: string) {
     try{
@@ -58,6 +59,36 @@ export class UserLogController {
       return createResponse(500,  e.message)
     }
   }
+
+//   get today activity user count
+  @UseGuards(AuthGuard)
+  @Get('activity/today')
+  async findActivityToday() {
+    try{
+      return createResponse(200, "Success", await this.userLogService.findActivityToday())
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('activity/week')
+  async findActivityLastWeek() {
+    try{
+      // get last week date
+      let today = new Date()
+      const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
+      // Get the date part only , format YYYY-MM-DD
+      const end = today.toISOString().split('T')[0];
+      const start = lastWeek.toISOString().split('T')[0]; // Get the date part only
+
+      return createResponse(200, "Success",     await this.userLogService.findActivity(start,end))
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
+  }
+
+
 
 
 

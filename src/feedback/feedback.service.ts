@@ -60,7 +60,7 @@ export class FeedbackService {
   }
 
   async count() {
-    return await this.feedbackRepository.countBy({parent_id:0, status:0});
+    return { total: await this.feedbackRepository.countBy({parent_id:0, status:0}) };
   }
 
   //findByParentId

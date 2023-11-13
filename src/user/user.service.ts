@@ -117,7 +117,7 @@ export class UserService {
 
 
   //countUserLastWeek
-  async countUserLastWeek() {
+  async countNewUserLastWeek() {
     try {
       // Get today's date
       const today = new Date();
@@ -161,4 +161,48 @@ export class UserService {
     }
   }
 
+
+  async countUserLastWeek() {
+    try {
+      // Get today's date
+      const today = new Date();
+
+      // Get the date of 7 days ago
+      const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
+
+      // Create an array to store the count of new users for each day of the last week
+      const userCounts = [];
+
+      // Loop through each day of the last week
+      for (let i = 0; i < 7; i++) {
+        // Calculate the date
+        const date = new Date(lastWeek.getFullYear(), lastWeek.getMonth(), lastWeek.getDate() + i);
+
+        // Format the date as YYYY-MM-DD
+        const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+        const query = `
+        SELECT COUNT(*) as checkuser
+        FROM "user"
+        WHERE create_at::date <= $1;
+    `;
+
+        const result = await this.userRepository.query(query, [formattedDate]);
+        const count = parseInt(result[0].checkuser)
+        // Store the count in the array
+        userCounts.push({
+          date: formattedDate,
+          userNumber: count,
+        });
+      }
+
+      // Return the array
+      return { userCounts };
+    } catch (error) {
+      console.error('Error counting users for the last week:', error);
+      throw new Error('Error counting users for the last week');
+    }
+  }
 }

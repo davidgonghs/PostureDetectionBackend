@@ -23,8 +23,12 @@ export class UserLogService {
   }
 
   //findActivity
-  findActivity(start:string, end:string) {
-    return getUserLog.getActivityUser(start, end)
+  async findActivity(start: string, end: string) {
+    return await getUserLog.getActivityUser(start, end)
+  }
+
+  async findActivityToday() {
+    return await getUserLog.getActivityToday()
   }
 
 

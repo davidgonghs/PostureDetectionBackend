@@ -64,16 +64,36 @@ const getActivityUser = async (start, end) => {
             totalUser += uniqueUserIds.length;
         }
 
-        return { countsByDate, totalUser };
+        return {
+            countsByDate,
+            totalUser };
     } catch (error) {
         console.error('Error fetching activity count by date range:', error);
         throw new Error('Error fetching activity count by date range');
     }
 };
 
+
+const getActivityToday = async () => {
+    const startDate = new Date();
+    const dateString = startDate.toISOString().split('T')[0]; // Get the date part only
+    const params = {
+        TableName: "UserLog",
+        FilterExpression: "attribute_exists(user_id) AND attribute_exists(login_date) AND contains(login_date, :specificDate)",
+        ProjectionExpression: "user_id, login_date",
+        ExpressionAttributeValues: {
+            ":specificDate": dateString,
+        },
+    };
+
+    const command = new ScanCommand(params);
+    const data = await docClient.send(command);
+    return {todayActivity: data.Items.length};
+}
 //export all functions
 export default {
     getAllUserLogs: getAllUserLogs,
     getUserLogsByUserId: getUserLogsByUserId,
-    getActivityUser: getActivityUser
+    getActivityUser: getActivityUser,
+    getActivityToday: getActivityToday
 }
