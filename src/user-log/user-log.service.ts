@@ -32,6 +32,12 @@ export class UserLogService {
   }
 
 
+  async findActivityLastWeek() {
+    return await getUserLog.findActivityLastWeek()
+  }
+
+
+
 
 
 }

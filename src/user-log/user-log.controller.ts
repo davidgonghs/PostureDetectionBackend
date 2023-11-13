@@ -75,14 +75,7 @@ export class UserLogController {
   @Get('activity/week')
   async findActivityLastWeek() {
     try{
-      // get last week date
-      let today = new Date()
-      const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
-      // Get the date part only , format YYYY-MM-DD
-      const end = today.toISOString().split('T')[0];
-      const start = lastWeek.toISOString().split('T')[0]; // Get the date part only
-
-      return createResponse(200, "Success",     await this.userLogService.findActivity(start,end))
+      return createResponse(200, "Success",     await this.userLogService.findActivityLastWeek())
     }catch (e) {
       return createResponse(500,  e.message)
     }

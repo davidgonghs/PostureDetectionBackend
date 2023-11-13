@@ -64,9 +64,7 @@ const getActivityUser = async (start, end) => {
             totalUser += uniqueUserIds.length;
         }
 
-        return {
-            countsByDate,
-            totalUser };
+        return { countsByDate, totalUser };
     } catch (error) {
         console.error('Error fetching activity count by date range:', error);
         throw new Error('Error fetching activity count by date range');
@@ -90,10 +88,63 @@ const getActivityToday = async () => {
     const data = await docClient.send(command);
     return {todayActivity: data.Items.length};
 }
+
+//findActivityLastWeek
+const findActivityLastWeek = async () => {
+    try {
+        const countsByDate = [];
+        let totalUser = 0;
+
+        // Convert start and end to Date objects
+        let today = new Date();
+
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
+
+        for(let i = 0; i < 7; i++) {
+            // Calculate the date
+            const date = new Date(lastWeek.getFullYear(), lastWeek.getMonth(), lastWeek.getDate() + i);
+            const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+              .toString()
+              .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+            const params = {
+                TableName: "UserLog",
+                FilterExpression: "attribute_exists(user_id) AND attribute_exists(login_date) AND contains(login_date, :specificDate)",
+                ProjectionExpression: "user_id, login_date",
+                ExpressionAttributeValues: {
+                    ":specificDate": formattedDate,
+                },
+            };
+
+            const command = new ScanCommand(params);
+            const data = await docClient.send(command);
+
+            // Get unique user_ids for the current date
+            const uniqueUserIds = Array.from(new Set(data.Items.map(item => item.user_id)));
+
+            countsByDate.push({
+                date: formattedDate,
+                count: uniqueUserIds.length,
+            });
+            totalUser += uniqueUserIds.length;
+        }
+
+        // Iterate through each date in the range
+        return { countsByDate, totalUser };
+    } catch (error) {
+        console.error('Error fetching activity count by date range:', error);
+        throw new Error('Error fetching activity count by date range');
+    }
+}
+
+
+
+
 //export all functions
 export default {
     getAllUserLogs: getAllUserLogs,
     getUserLogsByUserId: getUserLogsByUserId,
     getActivityUser: getActivityUser,
-    getActivityToday: getActivityToday
+    getActivityToday: getActivityToday,
+    findActivityLastWeek: findActivityLastWeek
 }

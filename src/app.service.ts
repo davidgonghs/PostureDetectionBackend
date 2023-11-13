@@ -41,15 +41,7 @@ export class AppService {
 
 
   async dataRevenueArea() {
-
-    let today = new Date()
-    const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
-    // Get the date part only , format YYYY-MM-DD
-    const end = today.toISOString().split('T')[0];
-    const start = lastWeek.toISOString().split('T')[0]; // Get the date part only
-
-    let activityUser = await this.userLogService.findActivity(start, end)
-
+    let activityUser = await this.userLogService.findActivityLastWeek()
     let countUser = await this.userService.countUserLastWeek()
     let date = []
     let userNumber = []
