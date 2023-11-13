@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Admin, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CreateFeedbackDto } from "../dto/create-feedback.dto";
+import { User } from "../../user/entities/user.entity";
 
 @Entity()
 export class Feedback {
@@ -41,14 +42,5 @@ export class Feedback {
     this.updated_at = updated_at?updated_at:new Date();
     this.status = status?status:0;
   }
-
-
-
-
-
-
-//   get list base on parent_id that means title id, then arrange by create_at
-
-
 
 }

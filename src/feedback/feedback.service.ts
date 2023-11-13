@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateFeedbackDto } from "./dto/create-feedback.dto";
+import { UpdateFeedbackDto } from "./dto/update-feedback.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Feedback } from "./entities/feedback.entity";
@@ -9,8 +9,10 @@ import { Feedback } from "./entities/feedback.entity";
 export class FeedbackService {
 
   constructor(
-    @InjectRepository(Feedback) private readonly feedbackRepository: Repository<Feedback>,
-  ) {}
+    @InjectRepository(Feedback) private readonly feedbackRepository: Repository<Feedback>
+  ) {
+  }
+
   async create(createFeedbackDto: CreateFeedbackDto) {
 
     // convert createFeedbackDto to Feedback
@@ -28,19 +30,19 @@ export class FeedbackService {
 
   async findAll(page: number, pageSize: number) {
     const [feedback, totalItems] = await this.feedbackRepository.findAndCount({
-      where: {parent_id:0},
+      where: { parent_id: 0 },
       skip: (page - 1) * pageSize,
       take: pageSize,
-      order: { created_at: "DESC" },
+      order: { created_at: "DESC" }
     });
 
     const totalPages = Math.ceil(totalItems / pageSize);
 
-    return { feedback, page,totalItems, totalPages };
+    return { feedback, page, totalItems, totalPages };
   }
 
   async findOne(id: number) {
-    return await this.feedbackRepository.findOne({ where: { id: id } })
+    return await this.feedbackRepository.findOne({ where: { id: id } });
   }
 
   async update(id: number, updateFeedbackDto: UpdateFeedbackDto) {
@@ -60,15 +62,30 @@ export class FeedbackService {
   }
 
   async count() {
-    return { total: await this.feedbackRepository.countBy({parent_id:0, status:0}) };
+    return { total: await this.feedbackRepository.countBy({ parent_id: 0, status: 0 }) };
   }
 
   //findByParentId
   async findByParentId(parent_id: number) {
-    return await this.feedbackRepository.find({
-      where: [{ parent_id: parent_id },{ id: parent_id }],
-      order: { created_at: "ASC" },
-      }
-    );
+    try {
+      const feedbackData = await this.feedbackRepository.query(`
+          SELECT feedback.*,
+                 admin.img      as admin_img,
+                 admin.username as admin_username,
+                 u.img          as user_img,
+                 u.username     as user_username
+          FROM feedback
+                   LEFT JOIN admin ON feedback.admin_id = admin.id
+                   LEFT JOIN "user" AS u ON feedback.user_id = u.id
+          WHERE (feedback.parent_id = ${parent_id} OR feedback.id = ${parent_id})
+          ORDER BY feedback.created_at ASC
+      `);
+
+      // Assuming that the returned data structure is compatible with your Feedback entity
+      return feedbackData;
+    } catch (error) {
+      console.error("Error executing raw SQL query:", error);
+      throw error;
+    }
   }
 }
