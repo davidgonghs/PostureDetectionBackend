@@ -9,24 +9,32 @@ import { createResponse } from "../utils/create-response";
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Post()
   async create(@Body() createFeedbackDto: CreateFeedbackDto) {
-    let feedback = await this.feedbackService.create(createFeedbackDto);
-    return createResponse(200, "Success", feedback);
+    try{
+      let feedback = await this.feedbackService.create(createFeedbackDto);
+      return createResponse(200, "Success", feedback);
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
   }
 
-  @UseGuards(AuthGuard)
+ // @UseGuards(AuthGuard)
   @Get()
   async findAll(
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
   ) {
-    const feedback = await this.feedbackService.findAll(page, pageSize);
-    return createResponse(200, "Success", feedback)
+    try{
+      const feedback = await this.feedbackService.findAll(page, pageSize);
+      return createResponse(200, "Success", feedback)
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
   }
 
-  @UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: number) {
     let feedback = await this.feedbackService.findOne(id);
@@ -39,7 +47,7 @@ export class FeedbackController {
     }
   }
 
-  @UseGuards(AuthGuard)
+ // @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateFeedbackDto: UpdateFeedbackDto) {
     try{
@@ -52,15 +60,30 @@ export class FeedbackController {
     return this.feedbackService.update(id, updateFeedbackDto);
   }
 
-  @UseGuards(AuthGuard)
+ // @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.feedbackService.remove(+id);
   }
 
-  @UseGuards(AuthGuard)
-  @Get('count')
+  //@UseGuards(AuthGuard)
+  @Get('count/feedback')
   async count() {
-    return createResponse(200, "Success", { count: await this.feedbackService.count() });
+    try{
+      return createResponse(200, "Success", { count: await this.feedbackService.count() });
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
+  }
+
+  // get feedback by parent id
+  //@UseGuards(AuthGuard)
+  @Get('parent/:id')
+  async findByParentId(@Param('id') id: number) {
+    try{
+      return createResponse(200, "Success", await this.feedbackService.findByParentId(id))
+    }catch (e) {
+      return createResponse(500,  e.message)
+    }
   }
 }

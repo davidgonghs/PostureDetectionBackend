@@ -11,7 +11,7 @@ export class FeedbackService {
   constructor(
     @InjectRepository(Feedback) private readonly feedbackRepository: Repository<Feedback>,
   ) {}
-  create(createFeedbackDto: CreateFeedbackDto) {
+  async create(createFeedbackDto: CreateFeedbackDto) {
 
     // convert createFeedbackDto to Feedback
     let feedback = new Feedback(createFeedbackDto.title,
@@ -19,17 +19,19 @@ export class FeedbackService {
       createFeedbackDto.user_id,
       createFeedbackDto.admin_id,
       createFeedbackDto.content,
-      createFeedbackDto.create_at,
-      createFeedbackDto.update_at,
+      createFeedbackDto.created_at,
+      createFeedbackDto.updated_at,
       createFeedbackDto.status);
 
-    return this.feedbackRepository.save(feedback);
+    return await this.feedbackRepository.save(feedback);
   }
 
   async findAll(page: number, pageSize: number) {
     const [feedback, totalItems] = await this.feedbackRepository.findAndCount({
+      where: {parent_id:0},
       skip: (page - 1) * pageSize,
       take: pageSize,
+      order: { created_at: "DESC" },
     });
 
     const totalPages = Math.ceil(totalItems / pageSize);
@@ -58,6 +60,15 @@ export class FeedbackService {
   }
 
   async count() {
-    return await this.feedbackRepository.countBy({parent_id:0});
+    return await this.feedbackRepository.countBy({parent_id:0, status:0});
+  }
+
+  //findByParentId
+  async findByParentId(parent_id: number) {
+    return await this.feedbackRepository.find({
+      where: [{ parent_id: parent_id },{ id: parent_id }],
+      order: { created_at: "ASC" },
+      }
+    );
   }
 }
