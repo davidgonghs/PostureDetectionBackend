@@ -5,7 +5,7 @@ export class UpdateFeedbackDto {
 
   id: number;
 
-  update_at: number;
+  updated_at: Date;
 
   status: number;  // 0: new, 1: read, 2: done
 }

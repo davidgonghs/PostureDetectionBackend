@@ -49,15 +49,14 @@ export class FeedbackController {
 
   @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateFeedbackDto: UpdateFeedbackDto) {
-    try{
-      if (this.feedbackService.update(id, updateFeedbackDto)) {
+  async update(@Param('id') id: number, @Body() updateFeedbackDto: UpdateFeedbackDto) {
+    try {
+      if (await this.feedbackService.update(id, updateFeedbackDto)) {
         return createResponse(200, "Success", "")
       }
-    }catch (e) {
-      return createResponse(500,  e.message,"")
+    } catch (e) {
+      return createResponse(500, e.message, "")
     }
-    return this.feedbackService.update(id, updateFeedbackDto);
   }
 
   @UseGuards(AuthGuard)
@@ -81,6 +80,7 @@ export class FeedbackController {
   @Get('parent/:id')
   async findByParentId(@Param('id') id: number) {
     try{
+
       return createResponse(200, "Success", await this.feedbackService.findByParentId(id))
     }catch (e) {
       return createResponse(500,  e.message)
