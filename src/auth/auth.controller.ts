@@ -19,8 +19,11 @@ export class AuthController {
   @Post('login')
   async login(@Request() req) {
     console.log(req.user);
-    let reponse = createResponse(200, "success", await this.authService.login(req.user));
-    return reponse;
+    try{
+      return createResponse(200, "success", await this.authService.login(req.user));
+    }catch (e) {
+      return createResponse(500, e.message)
+    }
   }
 
   // @Post('register')

@@ -11,6 +11,8 @@ provider:
   memorySize: 128
   logRetentionInDays: 1
   timeout: 15
+  deploymentBucket:
+    name: posturedetection.backend.code
 
 functions:
   api:
@@ -32,8 +34,8 @@ functions:
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/*"
 
 plugins:
-    - serverless-offline
-    - serverless-plugin-typescript
+  - serverless-jetpack
+  - serverless-offline
 
 
 package:

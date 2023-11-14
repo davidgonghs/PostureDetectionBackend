@@ -10,7 +10,11 @@ export const handler = async (event, context) => {
     const nestApp = await NestFactory.create(AppModule);
     // Enable CORS for specific origins
     nestApp.use(cors({
-      origin: ['https://admin.posturedetection.com', 'https://dnummrkhhy4nz.cloudfront.net'],
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
+      credentials: true,
     }));
     await nestApp.init();
     cachedServer = serverlessExpress({
