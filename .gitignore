@@ -3,7 +3,8 @@
 /node_modules
 .vscode/
 /.vscode
-
+.serverless/
+.serverless
 *.zip
 
 ./azip
@@ -41,3 +42,4 @@ lerna-debug.log*
 PostureDetectionBackend.zip
 PostureDetectionBackend v0.1.zip
 .vscode/launch.json
+.serverless/api.zip

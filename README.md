@@ -41,5 +41,6 @@ Note: Ensure you have Serverless Framework installed. If not , you can install i
 
 ## upload zip file to s3
     ```bash
-    $ aws s3 cp ./PostureDetectionBackend.zip s3://posturedetection.backend.code/PostureDetectionBackend0.2.zip
+    $ aws s3 cp ./posturedetection.zip s3://posturedetection.backend.code/code.zip
+    $ aws s3 cp ./nodejs.zip s3://posturedetection.backend.code/layer.zip
     ```
