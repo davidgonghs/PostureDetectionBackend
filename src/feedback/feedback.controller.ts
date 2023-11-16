@@ -48,7 +48,7 @@ export class FeedbackController {
   }
 
   @UseGuards(AuthGuard)
-  @Put(':id')
+  @Put('update/:id')
   async update(@Param('id') id: number, @Body() updateFeedbackDto: UpdateFeedbackDto) {
     try {
       if (await this.feedbackService.update(id, updateFeedbackDto)) {
@@ -76,7 +76,7 @@ export class FeedbackController {
   }
 
   // get feedback by parent id
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('parent/:id')
   async findByParentId(@Param('id') id: number) {
     try{

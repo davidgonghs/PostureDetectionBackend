@@ -48,14 +48,15 @@ export class FeedbackService {
   async update(id: number, updateFeedbackDto: UpdateFeedbackDto) {
     // find feedback by id
     try{
-      // let feedback = await this.findOne(id);
-      // if (!feedback) {
-      //   throw new Error("Feedback not found");
-      // }
+      let feedback = await this.feedbackRepository.findOne({ where: { id: id } });
+      if (!feedback) {
+        throw new Error("Feedback not found");
+      }
 
       // update feedback
-      updateFeedbackDto.updated_at = new Date;
-      await this.feedbackRepository.save(updateFeedbackDto);
+      feedback.updated_at = new Date;
+      feedback.status = updateFeedbackDto.status;
+      await this.feedbackRepository.save(feedback);
       return true;
     }catch (e) {
       throw new Error(e.message);
