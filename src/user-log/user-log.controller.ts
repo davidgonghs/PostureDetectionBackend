@@ -20,9 +20,9 @@ export class UserLogController {
 
   @UseGuards(AuthGuard)
   @Post()
-  create(@Body() userLog: UserLog) {
+  async create(@Body() userLog: UserLog) {
     try{
-      this.userLogService.create(userLog)
+      await this.userLogService.create(userLog)
       createResponse(200, "Success")
     }catch (e) {
       return createResponse(500,  e.message)

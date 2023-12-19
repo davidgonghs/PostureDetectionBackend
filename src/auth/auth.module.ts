@@ -9,20 +9,27 @@ import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
 import { Admin } from "../admin/entities/admin.entity";
 import { AdminService } from "../admin/admin.service";
 import { AuthGuard } from "./guards/auth.guard";
+import { UserService } from "../user/user.service";
+import { User } from "../user/entities/user.entity";
+import { EmailStrategy } from "./strategies/email-strategy";
+import { UserLogService } from "../user-log/user-log.service";
 
 @Module({
   providers: [
     AuthService,
     AdminService,
+    UserService,
+    UserLogService,
     AuthGuard,
     LocalStrategy,
+    EmailStrategy,
     JwtStrategy,
     RefreshJwtStrategy,
   ],
   controllers: [AuthController],
   exports: [AuthService],
   imports: [
-    TypeOrmModule.forFeature([Admin]),
+    TypeOrmModule.forFeature([Admin, User]),
     JwtModule.register({
       global: true,
       secret: `${process.env.JWT_SECRET}`,

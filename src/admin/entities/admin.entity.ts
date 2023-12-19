@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { User } from "../../user/entities/user.entity";
 
 @Entity()
 export class Admin {

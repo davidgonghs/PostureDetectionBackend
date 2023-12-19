@@ -11,7 +11,7 @@ export class UserLog{
     user_id: number;
 
     @IsString()
-    login_date: number;
+    login_date: string;
 
     @IsString()
     user_name: string;
@@ -28,14 +28,14 @@ export class UserLog{
     @IsString()
     system: string;
 
-    constructor(user_id: number, login_date: number, user_name: string, user_email: string, ip_address: string, platform: string, system: string) {
+    constructor(user_id: number, user_name: string, user_email: string, ip_address: string) {
         this.user_id = user_id;
-        this.login_date = login_date;
+        this.login_date = new Date().toISOString();
         this.user_name = user_name;
         this.user_email = user_email;
         this.ip_address = ip_address;
-        this.platform = platform;
-        this.system = system;
+        this.platform = 'mobile';
+        this.system = 'android';
     }
 
 

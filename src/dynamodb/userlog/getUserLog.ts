@@ -8,6 +8,13 @@ const getAllUserLogs = async () => {
 
     const command = new ScanCommand(params);
     let data = await docClient.send(command);
+    // Sort the data by login_date
+    data.Items.sort((a, b) => {
+        const dateA = new Date(a.login_date).getMilliseconds();
+        const dateB = new Date(b.login_date).getMilliseconds();
+        return dateA - dateB;
+    });
+
     return data.Items;
 }
 

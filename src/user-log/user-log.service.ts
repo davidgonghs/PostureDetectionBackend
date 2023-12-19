@@ -9,7 +9,7 @@ import { UserLog } from "./model/userlog.model";
 export class UserLogService {
 
   create(userLog: UserLog) {
-    userLog.login_date = Date.now();
+    userLog.login_date = new Date().toISOString();
     console.log(userLog);
     putUserLog(userLog).then(r => console.log(r));
   }

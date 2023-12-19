@@ -5,18 +5,26 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
 import { Between, Repository } from "typeorm";
 import { processPassword } from "../utils/processPassword";
+import { JwtService } from "@nestjs/jwt";
+import { UserLoginDto } from "./dto/user-login.dto";
+import { UserLogService } from "../user-log/user-log.service";
+import { UserLogModule } from "../user-log/user-log.module";
+import { UserLog } from "../user-log/model/userlog.model";
 
 @Injectable()
 export class UserService {
 
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private jwtService: JwtService,
+    private readonly userLogService: UserLogService
   ) {
   }
 
 
   async create(createUserDto: CreateUserDto) {
     const user: User = new User(createUserDto.username, createUserDto.password, createUserDto.email, createUserDto.img);
+    user.create_at = new Date();
     user.password = await processPassword(user.password);
     // const user = await this.adminRepository.create(admin);
     await this.userRepository.save(user);
@@ -54,6 +62,11 @@ export class UserService {
     }
   }
 
+  // find by email
+  async findOneByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOne({ where: { email: email } });
+  }
+
   async findOneWithUserName(userName: string) {
     return await this.userRepository.findOne({ where: { username: userName } });
   }
@@ -75,6 +88,9 @@ export class UserService {
     }
     if (updateUserDto.email) {
       userToUpdate.email = updateUserDto.email;
+    }
+    if (updateUserDto.img) {
+      userToUpdate.img = updateUserDto.img;
     }
     // Add more properties as needed
 
@@ -205,4 +221,36 @@ export class UserService {
       throw new Error('Error counting users for the last week');
     }
   }
+
+
+//   register
+  async register(createUserDto: CreateUserDto) {
+    const user: User = new User(createUserDto.username, createUserDto.password,createUserDto.email);
+    user.create_at = new Date();
+    user.password = await processPassword(user.password);
+    // const user = await this.adminRepository.create(admin);
+    await this.userRepository.save(user);
+    const { password, ...result } = user;
+    return user;
+  }
+
+//   google login
+  async googleLogin(createUserDto: CreateUserDto,ip: string) {
+    // find user by email
+    let user = await this.findOneByEmail(createUserDto.email);
+    // if user not exist create new user
+    if (!user) {
+      // create new user
+      user = await this.create(createUserDto);
+    }
+    await this.userLogService.create(new UserLog(user.id,user.username,user.email,ip));
+    const { password, ...result } = user;
+    return user;
+  }
+
+
+
+
+
+
 }

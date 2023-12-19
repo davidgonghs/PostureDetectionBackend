@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Request } from "@nestjs/common";
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { createResponse } from '../utils/create-response';
 import { AuthGuard } from "../auth/guards/auth.guard";
+import { LocalAuthGuard } from "../auth/guards/local-auth.guard";
+import { UserLoginDto } from "./dto/user-login.dto";
 
 @Controller('user')
 export class UserController {
@@ -103,6 +105,32 @@ export class UserController {
       return createResponse(500, e.message)
     }
   }
+
+
+//   register
+  @Post('register')
+  async register(@Body() createUserDto: CreateUserDto) {
+    try {
+      return createResponse(200, "Success", await this.userService.register(createUserDto))
+    } catch (e) {
+      return createResponse(500, e.message, "")
+    }
+  }
+
+//   google login
+  @Post('google-login')
+  async googleLogin(@Body() createUserDto: CreateUserDto,request: Request) {
+    try {
+      // get ip address
+      const ip = request.headers['x-forwarded-for'];
+      console.log(ip);
+      return createResponse(200, "Success", await this.userService.googleLogin(createUserDto,ip))
+    } catch (e) {
+      return createResponse(500, e.message, "")
+    }
+  }
+
+
 
 
 

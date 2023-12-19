@@ -5,22 +5,21 @@ import { AuthService } from '../auth.service';
 import { log } from 'console';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class EmailStrategy extends PassportStrategy(Strategy, 'email') {
   constructor(private authService: AuthService) {
     super({
-      usernameField: 'username',
-      passwordField:'password',
+      usernameField: 'email', // Use 'email' as the identifier
+      passwordField: 'password',
       passReqToCallback: true,
     });
   }
 
-  async validate(req: any,username: string, password: string) {
-
-    log('LocalStrategy.validate');
-    log(username);
+  async validate(req: any, email: string, password: string) {
+    log('EmailStrategy.validate');
+    log(email);
     log(password);
 
-    const user = await this.authService.validateAdminUser(username, password);
+    const user = await this.authService.validateUser(email, password);
     if (!user) {
       throw new UnauthorizedException();
     }

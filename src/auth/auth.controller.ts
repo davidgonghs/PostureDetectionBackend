@@ -7,6 +7,8 @@ import { AdminService } from "../admin/admin.service";
 import { CreateAdminDto } from "../admin/dto/create-admin.dto";
 import { createResponse } from "../utils/create-response";
 import { AuthGuard } from "./guards/auth.guard";
+import { EmailAuthGuard } from "./guards/email.guard";
+
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +19,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  async adminLogin(@Request() req) {
     console.log(req.user);
     try{
       return createResponse(200, "success", await this.authService.login(req.user));
@@ -25,6 +27,22 @@ export class AuthController {
       return createResponse(500, e.message)
     }
   }
+
+  @UseGuards(EmailAuthGuard)
+  @Post('user-login')
+  async userLogin(@Request() req) {
+    // console.log(req.body);
+    // get IP
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log(ip);
+    try{
+      return createResponse(200, "success", await this.authService.userLogin(req.user,ip));
+    }catch (e) {
+      return createResponse(500, e.message)
+    }
+  }
+
+
 
   // @Post('register')
   // async registerUser(@Body() createUserDto: CreateUserDto) {
