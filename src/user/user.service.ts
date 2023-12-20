@@ -241,6 +241,13 @@ export class UserService {
     // if user not exist create new user
     if (!user) {
       // create new user
+      // check user name
+      let username = createUserDto.username;
+      // if dont have user name then use email before @
+      if(!username){
+        username = createUserDto.email.split("@")[0];
+        createUserDto.username = username;
+      }
       user = await this.create(createUserDto);
     }
     await this.userLogService.create(new UserLog(user.id,user.username,user.email,ip));

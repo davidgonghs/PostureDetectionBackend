@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Request } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, Req } from "@nestjs/common";
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -118,11 +118,11 @@ export class UserController {
   }
 
 //   google login
-  @Post('google-login')
-  async googleLogin(@Body() createUserDto: CreateUserDto,request: Request) {
+  @Post('googlelogin')
+  async googleLogin(@Body() createUserDto: CreateUserDto,@Req() req) {
     try {
       // get ip address
-      const ip = request.headers['x-forwarded-for'];
+      var ip = req?.headers['x-forwarded-for'] || req?.connection.remoteAddress;
       console.log(ip);
       return createResponse(200, "Success", await this.userService.googleLogin(createUserDto,ip))
     } catch (e) {
